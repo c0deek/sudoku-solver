@@ -1,40 +1,105 @@
+import time
+
 board = [
-	[0,0,0,0,0,0,0,0,0,],
-	[0,0,0,0,0,0,0,0,0,],
-	[0,0,3,0,0,0,0,0,0,],
-	[0,0,0,0,0,0,0,0,0,],
-	[0,0,0,0,0,0,0,0,0,],
-	[0,0,0,0,0,6,0,0,0,],
-	[0,0,0,0,0,0,0,0,0,],
-	[0,0,0,0,0,0,0,0,0,],
-	[0,0,0,0,0,0,0,0,9,],
+	[0, 0, 0, 0, 0, 5, 4, 0, 9,], 
+	[4, 5, 1, 0, 0, 2, 3, 0, 0,],
+	[9, 8, 2, 0, 0, 0, 5, 6, 1,],
+	[6, 0, 7, 0, 0, 0, 9, 8, 0,],
+	[0, 0, 3, 4, 6, 0, 0, 0, 0,],
+	[5, 0, 0, 2, 8, 7, 0, 1, 0,],
+	[0, 4, 0, 0, 7, 0, 0, 9, 6,],
+	[3, 0, 0, 0, 0, 0, 7, 0, 0,],
+	[0, 0, 5, 9, 4, 6, 8, 0, 2,],
 ]
 
+
 def showBoard(board):
-	print(f"""
+	for i in range(0,9):
+		print('\n')
+		if i==3 or i==6:
+			print("---------------------")
+		for j in range(0,9):
+			if j==3 or j==6:
+				print("|", end=' ')
+			if(not board[i][j]):
+				print(board[i][j], end=" ")
+			else:
+				print(board[i][j], end=" ")
+	print('\n')
 
-		 -----------------------------------------
-		||---------------------------------------||
-		|| {board[0][0]} | {board[0][1]} | {board[0][2]} ||| {board[0][3]} | {board[0][4]} | {board[0][5]} ||| {board[0][6]} | {board[0][7]} | {board[0][8]} ||
-		||-----------|-|-----------|-|-----------||
-		|| {board[1][0]} | {board[1][1]} | {board[1][2]} ||| {board[1][3]} | {board[1][4]} | {board[1][5]} ||| {board[1][6]} | {board[1][7]} | {board[1][8]} ||
-		||-----------|-|-----------|-|-----------||
-		|| {board[2][0]} | {board[2][1]} | {board[2][2]} ||| {board[2][3]} | {board[2][4]} | {board[2][5]} ||| {board[2][6]} | {board[2][7]} | {board[2][8]} ||
-		||-----------|-|-----------|-|-----------||
-		||-----------|-|-----------|-|-----------||
-		|| {board[3][0]} | {board[3][1]} | {board[3][2]} ||| {board[3][3]} | {board[0][4]} | {board[0][5]} ||| {board[3][6]} | {board[0][7]} | {board[0][8]} ||
-		||-----------|-|-----------|-|-----------||
-		|| {board[4][0]} | {board[4][1]} | {board[4][2]} ||| {board[4][3]} | {board[4][4]} | {board[4][5]} ||| {board[4][6]} | {board[4][7]} | {board[4][8]} ||
-		||-----------|-|-----------|-|-----------||
-		|| {board[5][0]} | {board[5][1]} | {board[5][2]} ||| {board[5][3]} | {board[5][4]} | {board[5][5]} ||| {board[5][6]} | {board[5][7]} | {board[5][8]} ||
-		||-----------|-|-----------|-|-----------||
-		||-----------|-|-----------|-|-----------||
-		|| {board[6][0]} | {board[6][1]} | {board[6][2]} ||| {board[6][3]} | {board[6][4]} | {board[6][5]} ||| {board[6][6]} | {board[6][7]} | {board[6][8]} ||
-		||-----------|-|-----------|-|-----------||
-		|| {board[7][0]} | {board[7][1]} | {board[7][2]} ||| {board[7][3]} | {board[7][4]} | {board[7][5]} ||| {board[7][6]} | {board[7][7]} | {board[7][8]} ||
-		||-----------|-|-----------|-|-----------||
-		|| {board[8][0]} | {board[8][1]} | {board[8][2]} ||| {board[8][3]} | {board[8][4]} | {board[8][5]} ||| {board[8][6]} | {board[8][7]} | {board[8][8]} ||
-		||-----------|-|-----------|-|-----------||
-		 -----------------------------------------
-	""")
+def isValid(val, row, col):
+	isOk = True
+	for i in range(0,9):
+		if(i != col and board[row][i] == val):
+			isOk = False
 
+	for i in range(0,9):
+		if(i != row and board[i][col] == val):
+			isOk = False
+
+	for i in range(0,3):
+		i += int(row/3)*3
+		for j in range(0,3):
+			j += int(col/3)*3
+			if(i != row and j != col and board[i][j] == val):
+				isOk = False
+
+	return isOk
+
+
+def findNext(row, col):
+	if(col==8):
+		col = 0
+		row += 1
+	else:
+		col+=1
+
+	while(board[row][col] != 0):
+		if(col==8):
+			col = 0
+			row += 1
+		else:
+			col+=1
+
+	return row, col
+
+
+def getProblem(board):
+	print("Enter the board values(enter 0 if blank): ")
+	for i in range(0,9):
+		for j in range(0,9):
+			x = int(input("Enter row-wise nd hit enter after eachh value:\n"))
+			board[i][j] = x
+
+
+def fillValue(val, row, col):
+	found = False
+	for i in range(1,10):
+		if(isValid(i, row, col) and i != val):
+			board[row][col] = i
+			found =  True
+			break
+	return found
+
+
+def main():
+	showBoard(board)
+	row, col = 0, 0
+	val = 0
+	if(not board[row][col]):
+		fillValue(val, row, col)
+	while(row != 9):
+		curr = row, col
+		row, col = findNext(row, col)
+		if(not fillValue(val, row, col)):
+			val = 0
+			board[row][col] = 0
+			board[curr[0]][curr[1]] = 0
+		else:
+			val = board[row][col]
+		showBoard(board)
+		input()
+
+
+if __name__ == '__main__':
+	main()
