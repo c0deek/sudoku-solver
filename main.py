@@ -26,11 +26,11 @@ filled = [
 ]
 
 
-def getProblem(problem):
-	print("Enter the board values(enter 0 if blank): ")
+def getProblem(board):
+	print("Enter the board values row-wise\nEnter 0 for blank and hit enter after each value: ")
 	for i in range(0,9):
 		for j in range(0,9):
-			x = int(input("Enter row-wise nd hit enter after eachh value:\n"))
+			x = int(input())
 			board[i][j] = x
 
 
@@ -110,6 +110,7 @@ def getPrevious(filled, row, col):
 
 def solve(problem, filled):
 	createSuppliment(problem, filled)
+	anim = input("Show animation?(y/n): ")
 	row, col = 0, 0
 	while(row < 9 and col < 9):
 		if(filled[row][col]):
@@ -122,9 +123,13 @@ def solve(problem, filled):
 			row, col = getPrevious(filled, row, col)
 		else:
 			row, col = gotoNext(row, col)
-		clear()
-		showBoard(problem)
-		time.sleep(0.01)
+		
+		if(anim == 'y'):
+			showBoard(problem)
+			time.sleep(0.01)
+			clear()
+
+	showBoard(problem)
 
 
 def clear(): 
@@ -139,9 +144,14 @@ def main():
 	print("1. Enter problem")
 	print("2. Sample problem")
 	choice = int(input(">> "))
-	# solve(problem, filled)
-	# showBoard(filled)
-	# print(getPrevious(filled,0,7))
+	if(choice==1):
+		getProblem(problem)
+	elif(choice==2):
+		pass
+	else:
+		print("Wrong choice. WTF!!")
+
+	solve(problem, filled)
 
 
 if __name__ == '__main__':
