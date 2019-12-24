@@ -126,9 +126,9 @@ def solve(problem, filled):
 		
 		if(anim == 'y'):
 			showBoard(problem)
-			time.sleep(0.01)
+			time.sleep(0.001)
 			clear()
-
+        
 	showBoard(problem)
 
 
